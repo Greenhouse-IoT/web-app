@@ -47,3 +47,29 @@ export const deleteRecordById = async (cropId: string): Promise<{ status: string
       return { status: "error" };
     }
   };
+
+export const updateCropById = async (cropId: string, updatedData: Partial<Crop>): Promise<{ status: string; data?: Crop; message?: string }> => {
+    const { token } = useAuthStore.getState();
+    try {
+        const response = await instance.put<Crop>(`/crops/${cropId}`, updatedData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return {
+            status: "success",
+            data: response.data
+        };
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error) && error.response) {
+            return {
+                status: "error",
+                message: error.message
+            };
+        }
+        return {
+            status: "error",
+            message: "An unexpected error occurred."
+        };
+    }
+};

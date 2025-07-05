@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Dropdown } from "@/shared/components/DropDownComponent";
 import { DeleteDialog } from "@/shared/components/DeleteDialog";
 import { useDeleteCrop } from "../hooks/CropCard.hook";
+import { useEditCrop } from "../hooks/CropCard.hook";
 import {
   getRecordsByCropIdAndPhase,
   deleteRecordById,
 } from "../services/records.service";
+import { EditDialog } from "@/shared/components/EditDialog";
 
 type CropCardProps = {
   cropId: string;
@@ -25,18 +27,27 @@ export const CropCard = ({
   const capitalize = (s: string | any[]) =>
     s && s[0].toUpperCase() + s.slice(1);
   const [dropdown, setDropdown] = useState(false);
-  const [showDialog, setDialog] = useState(false);
-  const { handleDeleteCrop, loading, error } = useDeleteCrop();
+  const [showDeleteDialog, setDeleteDialog] = useState(false);
+  const [showEditDialog, setEditDialog] = useState(false);
+  const { handleDeleteCrop, loading: deleteLoading, error: deleteError } = useDeleteCrop();
+  const { handleEditCrop, loading: editLoading, error: editError } = useEditCrop();
 
-  const handleDialog = () => {
-    setDialog(!showDialog);
+  const handleDeleteDialog = () => {
+    setDeleteDialog(!showDeleteDialog);
+  };
+
+    const handleEditDialog = () => {
+    setEditDialog(!showEditDialog);
   };
 
   const options = ["Editar", "Eliminar"];
 
   const handleItemClick = (option: string) => {
     if (option === "Eliminar") {
-      handleDialog();
+      handleDeleteDialog();
+    }
+    else if (option === "Editar") {
+      handleEditDialog();
     }
   };
 
@@ -53,10 +64,20 @@ export const CropCard = ({
     try {
       await deleteAllRecords();
       await handleDeleteCrop(cropId);
-      setDialog(false);
+      setDeleteDialog(false);
       window.location.reload();
     } catch (err) {
       console.error("Error al eliminar el cultivo:", err);
+    }
+  };
+
+  const confirmEdit = async (updatedData: any) => {
+    try {
+      await handleEditCrop(cropId, updatedData);
+      setEditDialog(false);
+      window.location.reload();
+    } catch (err) {
+      console.error("Error al editar el cultivo:", err);
     }
   };
 
@@ -138,13 +159,22 @@ export const CropCard = ({
           </div>
         </div>
       </div>
-      {showDialog && (
+      {showDeleteDialog && (
         <DeleteDialog
-          hideDialog={handleDialog}
+          hideDialog={handleDeleteDialog}
           text={`¿Estás seguro de que deseas eliminar el cultivo: ${cropName} y todos sus registros?`}
           confirmDelete={confirmDelete}
-          loading={loading}
-          error={error}
+          loading={deleteLoading}
+          error={deleteError}
+        />
+      )}
+            {showEditDialog && (
+        <EditDialog
+          hideDialog={handleEditDialog}
+          cropName={cropName}
+          confirmEdit={confirmEdit}
+          loading={editLoading}
+          error={editError}
         />
       )}
     </div>
