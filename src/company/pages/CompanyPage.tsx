@@ -63,7 +63,7 @@ export const CompanyPage = (): ReactElement => {
   useEffect(() => {
     if (employees.length >= maxValue) {
       setInvitedWorkers(true);
-      setText("Limite de alcanzado")
+      setText("Limite de trabajadores alcanzado")
     } else {
       setInvitedWorkers(false);
       setText("Invitar Trabajador")

@@ -8,6 +8,7 @@ import {
   getRecordsByCropIdAndPhase,
   deleteRecordById,
 } from "../services/records.service";
+import { EditDialog } from "@/shared/components/EditDialog";
 
 type CropArchiveCardProps = {
   cropId: string;
@@ -43,7 +44,7 @@ export const CropArchiveCard = ({
     setDeleteDialog(!showEditDialog);
   };
 
-  const options = ["Editar", "Eliminar"];
+  const options = ["Eliminar"];
 
   const handleItemClick = (option: string) => {
     if (option === "Eliminar") {
@@ -243,13 +244,13 @@ export const CropArchiveCard = ({
           error={deleteError}
         />
       )}
-      {showDeleteDialog && (
-        <DeleteDialog
-          hideDialog={handleDeleteDialog}
-          text={`¿Estás seguro de que deseas eliminar el Crop: ${cropId} y todos sus registros?`}
-          confirmDelete={confirmDelete}
-          loading={deleteLoading}
-          error={deleteError}
+      {showEditDialog && (
+        <EditDialog
+          hideDialog={handleEditDialog}
+          cropName={cropName}
+          confirmEdit={confirmEdit}
+          loading={editLoading}
+          error={editError}
         />
       )}
     </div>

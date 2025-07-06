@@ -40,7 +40,7 @@ export const CropCard = ({
     setEditDialog(!showEditDialog);
   };
 
-  const options = ["Editar", "Eliminar"];
+  const options = ["Eliminar"];
 
   const handleItemClick = (option: string) => {
     if (option === "Eliminar") {
