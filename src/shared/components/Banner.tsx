@@ -2,12 +2,11 @@ import { ReactElement, useState, useEffect } from "react";
 import { useCompanyPage } from "@/company/hooks/useCompanyPage.hook.tsx";
 import { EditCompanyComponent } from "@/company/components/EditCompanyComponent";
 import { getMembershipByCompnyId } from "@/membership/services/membership.service";
-import { Membership } from "@/membership/models/Memberships";
 import { useLocation } from "react-router-dom";
 
 export const BannerComponent = (): ReactElement => {
   const [changeInfo, setChangeInfo] = useState(false);
-  const [membershipLevelName, setMembershipLevelName] = useState("")
+
   const location = useLocation();
   const activePage = location.pathname === "/company"
 
@@ -22,8 +21,8 @@ export const BannerComponent = (): ReactElement => {
       const fetchData = async () => {
         const result = await getMembershipByCompnyId(company.id);
         if (result.status === "success") {
-          const data = result.data as Membership;
-          setMembershipLevelName(data.membershipLevelName)
+
+
         }
       };
       fetchData();
@@ -74,11 +73,6 @@ export const BannerComponent = (): ReactElement => {
           <div className="flex">
             <p className="placeholder:text-secondary text-base sm:text-xs md:text-sm lg:text-lg whitespace-nowrap bg-transparent">
               {company?.tin}
-            </p>
-          </div>
-          <div className="flex">
-            <p className="placeholder:text-secondary text-base sm:text-sm md:text-sm lg:text-sm whitespace-nowrap bg-transparent">
-              Plan: {membershipLevelName}
             </p>
           </div>
         </div>

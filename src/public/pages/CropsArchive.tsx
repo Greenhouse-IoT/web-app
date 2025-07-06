@@ -39,7 +39,7 @@ export const CropsArchivePage = (): ReactElement => {
         crop.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
         crop.startDate.toLowerCase().includes(searchQuery.toLowerCase())
     )
-    .filter((crop) => !crop.state && selectedOption === "Todos"); // TODO: Filter by crop quality
+    .filter((crop) => !crop.state && selectedOption === "Todos"); 
 
   const sortedCrops = filteredCrops.sort((a, b) => {
     const dateA = new Date(a.startDate).getTime();
@@ -49,7 +49,7 @@ export const CropsArchivePage = (): ReactElement => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (company?.id){
+      if (company?.id) {
         const result = await getCrops(company?.id);
         if (result.status === "success") {
           const data = result.data as unknown as CropWrapper;
@@ -61,8 +61,13 @@ export const CropsArchivePage = (): ReactElement => {
         setLoading(false);
       }
     };
-    fetchData();
+
+    if (company?.id && loading) {
+      fetchData();
+    }
   }, [company]);
+
+
 
   if (loading) {
     return (

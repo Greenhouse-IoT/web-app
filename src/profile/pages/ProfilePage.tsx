@@ -22,8 +22,19 @@ export const ProfilePage = (): ReactElement => {
       setError("No estás autenticado.");
       return;
     }
-    setLoading(true);
-    setError(null);
+
+    if (
+    firstName === profile.firstName &&
+    lastName === profile.lastName &&
+    iconUrl === profile.iconUrl
+  ) {
+    setError("No se realizaron cambios en el perfil.");
+    return;
+  }
+
+  setLoading(true);
+  setError(null);
+
     try {
       const response = await ProfileService.editProfile(
         profile.id,

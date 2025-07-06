@@ -77,8 +77,12 @@ export const CropsInProgress = (): ReactElement => {
         setLoading(false);
       }
     };
-    fetchData();
+
+    if (company?.id && loading) {
+      fetchData();
+    }
   }, [company]);
+
 
   if (loading) {
     return (
